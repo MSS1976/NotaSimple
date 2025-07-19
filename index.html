@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="styles.css">
 
   <div id="sidebar">
-    <button id="btnNewNote">+ Nueva nota</button>
-    <div id="notesList"></div>
+    <button id="btnToggleNotes">Notas</button>
+   <div id="notesList" class="hidden"></div>
   </div>
 
   <div id="main">
@@ -41,7 +41,14 @@
   <script src="firebase-config.js"></script>
 
   <!-- Tu lógica principal -->
-  <script src="app.js"></script>
+  <script src="App.js"></script>
+  
+  
+   
+  </script>
+
+</body>
+</html>
 
   <script>
     // Mostrar modal con backdrop
@@ -59,13 +66,17 @@
     // Reemplazar en app.js el editModal.classList.remove("hidden") por showModal()
     // y editModal.classList.add("hidden") por hideModal()
 
-    // También conecta el botón "Nueva nota" para limpiar inputs y mostrar el modal:
-    document.getElementById('btnNewNote').addEventListener('click', () => {
-      document.getElementById('noteTitle').value = '';
-      document.getElementById('noteContent').value = '';
-      showModal();
+ 
+  // Esperamos que el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnToggleNotes = document.getElementById('btnToggleNotes');
+    const notesList = document.getElementById('notesList');
+
+    btnToggleNotes.addEventListener('click', () => {
+      notesList.classList.toggle('hidden');
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>

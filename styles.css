@@ -13,7 +13,10 @@ body {
 
   /* Opcional: si quieres esquinas redondeadas */
   border-radius: 8px;
-  
+  /* notas ocultas por defecto */
+.hidden {
+  display: none;
+
 }
 
 #sidebar {
@@ -88,7 +91,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#btnNewNote {
+#btnToggleNotes {
   /* Aquí van tus estilos */
   background-color: #0000FF; /* Azul */
   color: white; /* Texto blanco */
