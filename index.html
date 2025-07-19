@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuaderno Simple</title> 
+</head>
+<body>
+<link rel="stylesheet" href="styles.css">
+
+  <div id="sidebar">
+    <button id="btnNewNote">+ Nueva nota</button>
+    <div id="notesList"></div>
+  </div>
+
+  <div id="main">
+    <input type="text" id="noteTitle" placeholder="Título de la nota" />
+    <textarea id="noteContent" placeholder="Escribí tu nota aquí..."></textarea>
+    <div>
+      <button id="btnSaveNote">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Modal de edición -->
+  <div id="modalBackdrop"></div>
+  <div id="editModal">
+    <input type="text" id="modalNoteTitle" placeholder="Título de la nota" />
+    <textarea id="modalNoteContent" placeholder="Contenido de la nota"></textarea>
+    <div id="modalTimestamps"></div>
+    <div>
+      <button id="saveModalBtn">Guardar</button>
+      <button id="cancelBtn">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs para Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- Tu configuración Firebase -->
+  <script src="firebase-config.js"></script>
+
+  <!-- Tu lógica principal -->
+  <script src="app.js"></script>
+
+  <script>
+    // Mostrar modal con backdrop
+    function showModal() {
+      document.getElementById('editModal').classList.add('visible');
+      document.getElementById('modalBackdrop').classList.add('visible');
+    }
+
+    // Ocultar modal con backdrop
+    function hideModal() {
+      document.getElementById('editModal').classList.remove('visible');
+      document.getElementById('modalBackdrop').classList.remove('visible');
+    }
+
+    // Reemplazar en app.js el editModal.classList.remove("hidden") por showModal()
+    // y editModal.classList.add("hidden") por hideModal()
+
+    // También conecta el botón "Nueva nota" para limpiar inputs y mostrar el modal:
+    document.getElementById('btnNewNote').addEventListener('click', () => {
+      document.getElementById('noteTitle').value = '';
+      document.getElementById('noteContent').value = '';
+      showModal();
+    });
+  </script>
+
+</body>
+</html>

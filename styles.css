@@ -1,0 +1,278 @@
+body {
+  font-family: sans-serif;
+    background-color: #e0e0e0; /* Este es un gris muy claro */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+    /* --- Opciones de marco más personalizado --- */
+  border-top: 2px solid #5d3fd3;    /* Borde superior más grueso y oscuro */
+  border-bottom: 2px solid #5d3fd3; /* Borde inferior más grueso y oscuro */
+  border-left: 2px solid #5d3fd3;   /* Borde izquierdo (como el que tenías, o similar) */
+  border-right: 2px solid #5d3fd3;  /* Borde derecho (como el que tenías, o similar) */
+
+  /* Opcional: si quieres esquinas redondeadas */
+  border-radius: 8px;
+  
+}
+
+#sidebar {
+  width: 250px;
+  background-color: #CCCCCC;
+  border-right: 1px solid #c4b5fd;
+  padding: 1rem;
+  overflow-y: auto;
+  border: 1px solid #c4b5fd;
+  border-radius: 8px;
+  background-color: #D8D8D8; /* Color de fondo normal */
+  transition: background-color 0.3s ease; /* Para que el cambio sea suave */
+  /* --- Efecto 3D bien marcado con una sola sombra --- */
+  box-shadow: 30px 8px 25px rgba(0, 0, 0, 0.4); /* Desplazamiento y desenfoque aumentados, opacidad del 40% */
+  /* --- Mueve la sidebar un poco a la derecha --- */
+  margin-left: 20px; /* Por ejemplo, 20 píxeles a la derecha */
+  /* Asegúrate de que no haya un 'margin: auto;' o 'justify-content: center;'
+     en el contenedor padre (como el body) que pueda interferir. */
+}
+#sidebar:hover {
+  background-color: #e0e0e0; /* Color de fondo cuando el ratón está encima */
+}
+
+#main {
+  flex-grow: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#notesList {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.note-item {
+  background-color: #D3DBE0;
+  border-radius: 0.5 rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+  max-height: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.note-item:hover {
+  background-color: #fde68a;
+}
+
+.note-item strong {
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.15rem;
+}
+
+.note-item span {
+  font-size: 0.75rem;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#btnNewNote {
+  /* Aquí van tus estilos */
+  background-color: #0000FF; /* Azul */
+  color: white; /* Texto blanco */
+  padding: 10px 20px; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Esquinas ligeramente redondeadas */
+  cursor: pointer; /* Cambia el cursor a una mano */
+  font-size: 16px; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  margin-bottom: 10px; /* Espacio debajo del botón */
+  width: 100%; /* Ocupa todo el ancho disponible en su contenedor */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+/* Botón eliminar dentro de cada nota */
+.btn-delete {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: #000000; /* Fondo negro */
+  color: #ffffff;       /* Texto blanco */
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 6px 9px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-delete:hover {
+  opacity: 1;
+  transform: scale(1.1);
+
+}
+
+textarea {
+  width: 70%;
+  height: 700px;
+  background: write;
+  margin-top: 0.9rem;
+  display: block; /* Importante: el input se comporta como un bloque */
+  margin-left: auto; /* Margen izquierdo automático */
+  margin-right: auto; /* Margen derecho automático */
+  /* O la forma abreviada: */
+  /* margin: 0 auto; */ /* Centra horizontalmente, 0 arriba y abajo */
+  width: 70%; /* Define un ancho para el input, NO el 100% si lo quieres centrar */
+  /* ... otras propiedades de estilo ... */
+   /* --- Opciones de marco más personalizado --- */
+
+  border-top: 1px solid #5d3fd3;    /* Borde superior más grueso y oscuro */
+  border-bottom: 1px solid #5d3fd3; /* Borde inferior más grueso y oscuro */
+  border-left: 1px solid #5d3fd3;   /* Borde izquierdo (como el que tenías, o similar) */
+  border-right: 1px solid #5d3fd3;  /* Borde derecho (como el que tenías, o similar) */
+
+  /* Opcional: si quieres esquinas redondeadas */
+  border-radius: 8px;
+}
+
+button {
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.dates {
+  font-size: 0.65rem;
+  color: #6b7280; /* gray-500 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#noteTitle {
+  /* Aquí van tus estilos */
+  width: 70%; /* Ocupa todo el ancho disponible */
+  padding: 10px; /* Espaciado interno */
+  margin-bottom: 10px; /* Margen inferior */
+  border: 1px solid #ccc; /* Borde suave */
+  border-radius: 4px; /* Esquinas redondeadas */
+  box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho/alto */
+  font-size: 16px; /* Tamaño de fuente */
+  display: block; /* Importante: el input se comporta como un bloque */
+  margin-left: auto; /* Margen izquierdo automático */
+  margin-right: auto; /* Margen derecho automático */
+  /* O la forma abreviada: */
+  /* margin: 0 auto; */ /* Centra horizontalmente, 0 arriba y abajo */
+  width: 70%; /* Define un ancho para el input, NO el 100% si lo quieres centrar */
+  /* ... otras propiedades de estilo ... */
+}
+
+/* Estilos para el modal */
+#editModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  max-width: 90%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+}
+
+#editModal.visible {
+  display: flex;
+}
+
+#modalTimestamps {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 0.3rem;
+  margin-bottom: 0.7rem;
+}
+
+/* Fondo oscuro detrás del modal */
+#modalBackdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+  display: none;
+}
+
+#modalBackdrop.visible {
+  display: block;
+}
+
+/* -------------------- RESPONSIVE DESIGN -------------------- */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    height: auto;
+    border: none;
+    border-radius: 0;
+  }
+
+  #sidebar {
+    width: 90%;
+   margin-left: auto; /* Margen izquierdo automático */
+   margin-right: auto; /* Margen derecho automático */
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0.5rem;
+  }
+
+  #main {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  #noteTitle,
+  textarea {
+    width: 93%;
+    box-sizing: border-box;
+    margin-left: 0; /* Margen izquierdo automático */
+    margin-right: 0; /* Margen derecho automático */
+  }
+
+  textarea {
+    height: 250px;
+  }
+
+  #btnNewNote {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .note-item {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  #editModal {
+    width: 95%;
+    padding: 1rem;
+    transform: translate(-50%, -50%);
+  }
+
+  #modalBackdrop {
+    width: 100vw;
+    height: 100vh;
+  }
+}
