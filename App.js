@@ -1,106 +1,120 @@
-let notes = [];
-let currentNoteId = null;
-
-const notesListEl = document.getElementById("notesList");
-const noteTitleEl = document.getElementById("noteTitle");
-const noteContentEl = document.getElementById("noteContent");
-const btnSaveNote = document.getElementById("btnSaveNote");
-const btnNewNote = document.getElementById("btnNewNote");
-
-// Referencia a Realtime Database
+// Obtener referencia a Firebase desde firebase-config.js
 const notesRef = window.notesRef;
 
-function createNoteListItem(id, note) {
-  const div = document.createElement("div");
-  div.className = "note-item";
-  div.style.position = "relative"; // necesario para el botón eliminar
+// Elementos del DOM
+const noteTitle = document.getElementById("noteTitle");
+const noteContent = document.getElementById("noteContent");
+const btnSave = document.getElementById("btnSaveNote");
+const notesList = document.getElementById("notesList");
 
-  const titleStrong = document.createElement("strong");
-  titleStrong.textContent = note.title || "Sin título";
+// Modal
+const modal = document.getElementById("editModal");
+const backdrop = document.getElementById("modalBackdrop");
+const modalTitle = document.getElementById("modalNoteTitle");
+const modalContent = document.getElementById("modalNoteContent");
+const modalTimestamps = document.getElementById("modalTimestamps");
+const saveModalBtn = document.getElementById("saveModalBtn");
+const cancelBtn = document.getElementById("cancelBtn");
 
-  const contentSpan = document.createElement("span");
-  contentSpan.textContent = note.content || "";
+let currentEditingId = null;
 
-  // ✅ Botón eliminar
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "🗑";
-  deleteBtn.className = "btn-delete";
-  deleteBtn.title = "Eliminar nota";
-
-  deleteBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // evita seleccionar la nota al hacer clic en el botón
-    if (confirm("¿Estás seguro de que querés eliminar esta nota?")) {
-      notesRef.child(id).remove();
-      if (currentNoteId === id) {
-        currentNoteId = null;
-        noteTitleEl.value = "";
-        noteContentEl.value = "";
-      }
-    }
-  });
-
-  div.appendChild(deleteBtn);
-  div.appendChild(titleStrong);
-  div.appendChild(contentSpan);
-
-  div.addEventListener("click", () => {
-    currentNoteId = id;
-    noteTitleEl.value = note.title || "";
-    noteContentEl.value = note.content || "";
-  });
-
-  return div;
+// Mostrar modal
+function showModal() {
+  modal.classList.add('visible');
+  backdrop.classList.add('visible');
 }
 
-function renderNotesList() {
-  notesListEl.innerHTML = "";
-  for (const id in notes) {
-    notesListEl.appendChild(createNoteListItem(id, notes[id]));
-  }
+// Ocultar modal
+function hideModal() {
+  modal.classList.remove('visible');
+  backdrop.classList.remove('visible');
+  currentEditingId = null;
 }
 
-function loadNotesFromDatabase() {
-  notesRef.on("value", (snapshot) => {
-    notes = snapshot.val() || {};
-    renderNotesList();
-  });
-}
+// Crear nueva nota
+btnSave.addEventListener("click", () => {
+  const title = noteTitle.value.trim();
+  const content = noteContent.value.trim();
 
-function saveNote() {
-  const title = noteTitleEl.value.trim();
-  const content = noteContentEl.value.trim();
-
-  if (!title && !content) {
-    alert("La nota está vacía. Agregá título o contenido.");
+  if (!title || !content) {
+    alert("Completá el título y el contenido.");
     return;
   }
 
-  const newNote = {
+  const note = {
     title,
     content,
-    timestamp: new Date().toISOString()
+    timestamp: Date.now()
   };
 
-  if (currentNoteId === null) {
-    const newRef = notesRef.push();
-    newRef.set(newNote);
-    currentNoteId = newRef.key;
-  } else {
-    notesRef.child(currentNoteId).update(newNote);
+  notesRef.push(note, (error) => {
+    if (error) {
+      alert("Error al guardar la nota.");
+    } else {
+      noteTitle.value = "";
+      noteContent.value = "";
+    }
+  });
+});
+
+// Cargar y mostrar notas en tiempo real
+notesRef.on("value", (snapshot) => {
+  const notes = snapshot.val();
+  notesList.innerHTML = "";
+
+  for (let id in notes) {
+    const note = notes[id];
+
+    const item = document.createElement("div");
+    item.classList.add("note-item");
+    item.innerHTML = `
+      <strong>${note.title}</strong>
+      <span>${note.content}</span>
+      <button class="btn-delete" data-id="${id}">X</button>
+    `;
+
+    // Editar al hacer clic
+    item.addEventListener("click", (e) => {
+      if (e.target.classList.contains("btn-delete")) return; // ignorar si fue el botón
+      modalTitle.value = note.title;
+      modalContent.value = note.content;
+      modalTimestamps.textContent = `Editando nota creada el ${new Date(note.timestamp).toLocaleString()}`;
+      currentEditingId = id;
+      showModal();
+    });
+
+    // Eliminar
+    item.querySelector(".btn-delete").addEventListener("click", (e) => {
+      const idToDelete = e.target.dataset.id;
+      if (confirm("¿Eliminar esta nota?")) {
+        notesRef.child(idToDelete).remove();
+      }
+    });
+
+    notesList.appendChild(item);
+  }
+});
+
+// Guardar cambios del modal
+saveModalBtn.addEventListener("click", () => {
+  const newTitle = modalTitle.value.trim();
+  const newContent = modalContent.value.trim();
+
+  if (!newTitle || !newContent) {
+    alert("Título y contenido requeridos.");
+    return;
   }
 
-  noteTitleEl.value = "";
-  noteContentEl.value = "";
-  currentNoteId = null;
-}
+  if (currentEditingId) {
+    notesRef.child(currentEditingId).update({
+      title: newTitle,
+      content: newContent
+    });
+  }
 
-function newNote() {
-  currentNoteId = null;
-  noteTitleEl.value = "";
-  noteContentEl.value = "";
-}
+  hideModal();
+});
 
-btnSaveNote.addEventListener("click", saveNote);
-btnNewNote.addEventListener("click", newNote);
-
-loadNotesFromDatabase();
+// Cancelar edición
+cancelBtn.addEventListener("click", hideModal);
+backdrop.addEventListener("click", hideModal);
